@@ -7,7 +7,7 @@ namespace BuildingBlocks.Behaviours;
 
 public class LoggingBehavior<TRequest, TResponse> (ILogger<LoggingBehavior<TRequest, TResponse>> logger)
     : IPipelineBehavior<TRequest, TResponse>
-    where TRequest: notnull, ICommand<TResponse>
+    where TRequest: notnull, IRequest<TResponse>
     where TResponse: notnull
 {
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
@@ -24,7 +24,7 @@ public class LoggingBehavior<TRequest, TResponse> (ILogger<LoggingBehavior<TRequ
         var warningTime = 3;
         if(takenTime.Seconds > warningTime)
         {
-            logger.LogWarning($"[PERFORMANCE] The reqquest {typeof(TRequest).Name} took {takenTime.Seconds}");
+            logger.LogWarning($"[PERFORMANCE] The reqquest {typeof(TRequest).Name} took {takenTime.Seconds}s");
         }
 
         return response;
